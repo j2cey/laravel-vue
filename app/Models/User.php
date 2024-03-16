@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\RoleType;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Notifications\Notifiable;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -21,6 +24,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
+        'role'
     ];
 
     /**
@@ -42,4 +47,27 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    protected $appends = [
+        'formatted_created_at',
+    ];
+
+    public function getFormattedCreatedAtAttribute()
+    {
+        return $this->created_at->format(setting('date_format'));
+    }
+
+    public function role(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => RoleType::from($value)->name,
+        );
+    }
+
+    public function avatar(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => asset($value ? Storage::url($value) : 'noimage.png'),
+        );
+    }
 }

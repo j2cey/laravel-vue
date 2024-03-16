@@ -58,6 +58,7 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL'),
+    'photos_folder' => env('PHOTOS_FOLDER', 'photos'),
 
     /*
     |--------------------------------------------------------------------------
@@ -71,6 +72,14 @@ return [
     */
 
     'timezone' => 'UTC',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Date formatting
+    |--------------------------------------------------------------------------
+    |
+    */
+    'date_format' => 'd-m-Y',
 
     /*
     |--------------------------------------------------------------------------
@@ -159,6 +168,7 @@ return [
         /*
          * Package Service Providers...
          */
+        App\Providers\FortifyServiceProvider::class,
 
         /*
          * Application Service Providers...
